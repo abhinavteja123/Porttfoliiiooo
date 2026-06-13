@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cream: #f4f2ec;
+  --ink: #14141a;
+  --iris-a: #6e8bff;
+  --iris-b: #ff8fb1;
+  --mint: #8ff0c8;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: auto; /* Lenis owns scrolling; native smooth would fight it */
+  }
+
+  body {
+    @apply bg-cream text-ink font-sans;
+    margin: 0;
+    overflow-x: hidden;
+    /* warm paper base with a faint iridescent wash */
+    background-image: radial-gradient(
+        120% 80% at 80% -10%,
+        rgba(110, 139, 255, 0.1),
+        transparent 60%
+      ),
+      radial-gradient(120% 80% at 0% 110%, rgba(255, 143, 177, 0.1), transparent 60%);
+    background-attachment: fixed;
+  }
+
+  /* Hide the OS cursor on devices with a precise pointer — custom cursor takes over */
+  @media (pointer: fine) {
+    body[data-custom-cursor="on"] {
+      cursor: none;
+    }
+    body[data-custom-cursor="on"] a,
+    body[data-custom-cursor="on"] button {
+      cursor: none;
+    }
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--iris-a);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background: var(--iris-b);
+    color: #fff;
+  }
+}
+
+@layer components {
+  .glass {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    box-shadow: 0 20px 60px -20px rgba(20, 20, 26, 0.18);
+  }
+
+  .text-iris {
+    background: linear-gradient(120deg, var(--iris-a), var(--iris-b));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Reveal primitive used by GSAP/Framer reveals; safe default if JS is slow */
+  .reveal-line {
+    display: block;
+    overflow: hidden;
+  }
+
+  .section-shell {
+    @apply relative mx-auto w-full max-w-[1400px] px-6 sm:px-10 lg:px-16;
+  }
+}
+
+/* Accessibility: collapse all motion when the user opts out. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Skip link */
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: -4rem;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  background: var(--ink);
+  color: var(--cream);
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 1rem;
+}
